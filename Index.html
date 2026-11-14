@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffe5ef">
+<title>Ahla-washla ❤️</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(160deg,#fff5f8,#ffe1ec);font-family:Georgia,serif;color:#75485c;text-align:center}
+header{padding:35px 15px 20px}
+h1{font-size:38px;color:#d66b91;margin:12px 0}
+.subtitle{font-style:italic}
+main{max-width:520px;margin:auto;padding:15px}
+.card{background:#ffffffd9;border:1px solid #f8ccdc;border-radius:22px;padding:22px;margin:16px 0;box-shadow:0 5px 20px #d88da51c}
+h2{color:#ce7195}
+button{border:0;background:#df83a5;color:white;padding:12px 20px;border-radius:22px;font-size:15px;margin:5px}
+input,textarea{width:100%;padding:12px;border:1px solid #efc1d2;border-radius:12px;margin:8px 0;font:inherit}
+textarea{min-height:90px}
+.heart{font-size:30px}
+footer{padding:25px;color:#ad7890}
+.item{background:#fff0f5;padding:12px;border-radius:12px;margin:8px 0;text-align:left}
+</style>
+</head>
+<body>
+<header>
+<div class="heart">💕 🌷 💕</div>
+<h1>Ahla-washla</h1>
+<div class="subtitle">Our little world, just for two.</div>
+</header>
+<main>
+<section class="card">
+<h2>Mohamed & Amy</h2>
+<p>Two hearts, one beautiful story.</p>
+<div class="heart">❤️</div>
+<p id="days"></p>
+<p>Since November 9, 2025</p>
+</section>
+
+<section class="card">
+<h2>💌 Love Letters</h2>
+<textarea id="letter" placeholder="Write something sweet..."></textarea>
+<button onclick="saveLetter()">Save our letter</button>
+<div id="letters"></div>
+</section>
+
+<section class="card">
+<h2>📸 Our Memories</h2>
+<input type="file" accept="image/*" id="photo">
+<button onclick="savePhoto()">Add a memory</button>
+<div id="memories"></div>
+</section>
+
+<section class="card">
+<h2>🌸 Our Little Garden</h2>
+<p>Every little flower is a reason to smile.</p>
+<div id="garden" class="heart">🌷 🌸 🌷</div>
+<button onclick="grow()">Plant a flower</button>
+</section>
+
+<section class="card">
+<h2>🎮 Couple Quiz</h2>
+<p id="question">Who said "I love you" first?</p>
+<button onclick="answer('Mohamed ❤️')">Mohamed</button>
+<button onclick="answer('Amy ❤️')">Amy</button>
+<p id="answer"></p>
+</section>
+
+<section class="card">
+<h2>🎬 Movie Night</h2>
+<input id="movie" placeholder="What should we watch?">
+<button onclick="addMovie()">Add movie</button>
+<div id="movies"></div>
+</section>
+
+<section class="card">
+<h2>💗 A little reminder</h2>
+<p>Distance is only a number. You are always close to my heart.</p>
+</section>
+</main>
+<footer>Made with love, for Mohamed & Amy ❤️</footer>
+
+<script>
+const start=new Date(2025,10,9);
+const days=Math.floor((new Date()-start)/86400000);
+document.getElementById("days").textContent=days+" beautiful days together ❤️";
+
+function saveLetter(){
+ let v=document.getElementById("letter").value.trim();
+ if(!v)return;
+ let a=JSON.parse(localStorage.getItem("letters")||"[]");
+ a.unshift(v);localStorage.setItem("letters",JSON.stringify(a));
+ document.getElementById("letter").value="";showLetters();
+}
+function showLetters(){
+ let a=JSON.parse(localStorage.getItem("letters")||"[]");
+ document.getElementById("letters").innerHTML=a.map(x=>'<div class="item">💌 '+escapeHTML(x)+'</div>').join("");
+}
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function grow(){
+ document.getElementById("garden").textContent+=" 🌷";
+}
+function answer(v){
+ document.getElementById("answer").textContent="The right answer is: "+v+" 😘";
+}
+function addMovie(){
+ let v=document.getElementById("movie").value.trim();
+ if(!v)return;
+ let a=JSON.parse(localStorage.getItem("movies")||"[]");
+ a.push(v);localStorage.setItem("movies",JSON.stringify(a));
+ document.getElementById("movie").value="";showMovies();
+}
+function showMovies(){
+ let a=JSON.parse(localStorage.getItem("movies")||"[]");
+ document.getElementById("movies").innerHTML=a.map(x=>'<div class="item">🎬 '+escapeHTML(x)+'</div>').join("");
+}
+function savePhoto(){
+ let f=document.getElementById("photo").files[0];
+ if(!f)return;
+ let r=new FileReader();
+ r.onload=()=>{
+ let a=JSON.parse(localStorage.getItem("photos")||"[]");
+ a.push(r.result);localStorage.setItem("photos",JSON.stringify(a));showPhotos();
+ };
+ r.readAsDataURL(f);
+}
+function showPhotos(){
+ let a=JSON.parse(localStorage.getItem("photos")||"[]");
+ document.getElementById("memories").innerHTML=a.map(x=>'<img src="'+x+'" style="width:100%;border-radius:12px;margin-top:10px">').join("");
+}
+showLetters();showMovies();showPhotos();
+</script>
+</body>
+</html>
